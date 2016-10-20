@@ -87,5 +87,8 @@ api.openweathermap.org/data/2.5/forecast/daily?id=734077&units=metric&cnt=7&APPI
 
 ```
 
+2 λόγια το logging
+
+![logging types](https://github.com/UomMobileDevelopment/Lesson03-material/blob/master/logging-types.png)
 
 
