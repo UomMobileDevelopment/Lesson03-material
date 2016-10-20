@@ -116,6 +116,54 @@ listView.setAdapter(...)
 
    1. Rename PlaceholderFragment -> ForecastFragment
    2. Move ForecastFragment to new file
-   3. Create a new AsyncTask child called FetchWeatherTask with the networking code snippet from above
-   
+   3. Create a new AsyncTask child called FetchWeatherTask with the networking code snippet from above. Αυτή η κλάση να δηλωθεί ως εσωτερική της ForecastFragment. Η δήλωσή της αρχικά μπορεί να είναι κάπως έτσι:
+   ```
+   public class FetchWeatherTask extends AsyncTask<Void,Void,Void> {
+   ....
+   }
+   ```
+   Μην ξεχάσουμε να υλοποιήσουμε την αφηρημένη μέθοδο ``` protected Void doInBackground(Void... params) {} ```
+
+Τώρα η εφαρμογή τρέχει χωρίς κρασάρισμα αλλά τα δεδομένα μας είναι ακόμη dummy.
+
+Θα προσθέσουμε ένα κουμπί στην κεντρική οθόνη ώστε όταν το πατάμε να φορτώνει τα αληθινά δεδομένα απο την υπηρεσία καιρού. Ωστόσο θα πρέπει να γνωρίζουμε πως αυτή η λύση είναι μόνο για debugging και δεν πρέπει να είναι μόνιμη. Είναι ΚΑΚΗ ιδέα να βασιζόμαστε σε κουμπιά για να ανανεώνουμε τα δεδομένα μας. Δείτε εδώ περισσότερα: https://www.youtube.com/watch?v=VFdIy0GjUEs
+Επίσης το TASΚ φόρτωσης δεδομένων απο την υπηρεσία καιρού χρειάζεται βελτίωση καθώς είναι αρκετά "δεμένο" με το UI Activity και οποιαδήποτε αλλαγή στο UI (πχ περιστροφή οθόνης) θα διακόψει το TASK και τη μεταφορά δεδομένων. Για την ώρα όμως παραμένουμε έτσι.
+
+Ας προσθέσουμε το κουμπί ανανέωσης. Θα μπει ως επιλογή στο ΜΕΝΟΥ. Δυο λόγια για το μενού:
+
+
+![Δομή ΜΕΝΟΥ](https://github.com/UomMobileDevelopment/Lesson03-material/blob/master/menu.png)
+
+Υλοποιούμε τις παρακάτω μεθόδους στην κλάση ForecastFragment
+
+```
+@Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+```
+Δηλώνει πως το Fragment αυτό έχει μια δική του επιλογή στο μενού (συγκεκριμένα τη Refresh)
+```
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.forecastfragment, menu);
+    }
+```
+κάνει inflate (φορτώνει στο view) την επιλογή Refreash του μενού
+```
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == R.id.action_refresh){
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+```
+Δηλώνει ποιος κώδικας θα τρέχει όταν πατηθεί η επιλογή Refresh στο μενού
+
+
+ 
 
