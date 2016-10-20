@@ -38,8 +38,8 @@ api.openweathermap.org/data/2.5/forecast/daily?id=734077&units=metric&cnt=7&APPI
                 // Construct the URL for the OpenWeatherMap query
                 // Possible parameters are avaiable at OWM's forecast API page, at
                 // http://openweathermap.org/API#forecast
-                //MODIFED FOR CITY OF THESSALONIKI, GREECE
-                URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?q=734077&mode=json&units=metric&cnt=7");
+                //MODIFIED FOR CITY OF THESSALONIKI, GREECE
+                URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?id=734077&mode=json&units=metric&cnt=7");
 
                 // Create the request to OpenWeatherMap, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
@@ -156,14 +156,90 @@ listView.setAdapter(...)
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if(id == R.id.action_refresh){
+       if(id == R.id.action_refresh){
+            AsyncTask<Void, Void, Void> weatherTask = new FetchWeatherTask().execute();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 ```
-Δηλώνει ποιος κώδικας θα τρέχει όταν πατηθεί η επιλογή Refresh στο μενού
+Δηλώνει ποιος κώδικας θα τρέχει όταν πατηθεί η επιλογή Refresh στο μενού. Προσθέσαμε και τη δημιουργία και κλήση του νέου AsyncTask
+
+ΟΜΩΣ! Αν τρέξουμε την εφαρμογή και πατήσουμε Refresh, η εφαρμογή θα κρασάρει και θα σταματήσει! Στα logs βλέπουμε τον λόγο:
+
+```
+ Caused by: java.lang.SecurityException: Permission denied (missing INTERNET permission?)
+```
+
+Πρέπει να ζητήσουμε την άδεια απο το σύστημα για να πάρουμε πρόσβαση στο Internet. Αυτό γίνεται προσθέτοντας την εντολή
+
+```  
+<uses-permission android:name="android.permission.INTERNET" />
+```
+
+στο αρχείο AndroidManifest.xml σε αυτό το σημείο:
+
+```
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.android.sunshine.app" >
+   <uses-permission android:name="android.permission.INTERNET" />
+....
+```
+
+Για να επιβεβαιώσουμε τώρα οτι έρχονται σωστά τα δεδομένα απο την υπηρεσία καιρού προσθέτουμε μια εντολή LOG στο FetchWeatherTask για να εμφανίσουμε τη μεταβλητή forecastJsonStr:
+
+```
+ forecastJsonStr = buffer.toString();
+ Log.v(LOG_TAG,"Forecast JSON String: "+forecastJsonStr);
+```
+
+και βλέπουμε το LOG στην καρτέλα AndroidMonitor του Android Studio. Τα δεδομένα έρχονται κανονικά.
 
 
- 
+Βελτιώνουμε την δημιουργία του Web Service URL και εισάγουμε παραμετροποίηση στο Fetch Weathet Task έτσι ώστε να δέχεται σαν πρώτη παράμετρο τον κωδικό κάποιας πόλης και να φέρνει τον καιρό απο τη συγκεκριμένη πόλη.
 
+```
+ AsyncTask<String, Void, Void> weatherTask = new FetchWeatherTask().execute("734077");
+```
+
+Δείτε στο αρχείο ```greek-city-codes.csv``` για κωδικούς απο όλες τις ελληνικές πόλεις.
+
+Το URL θα 'χτιστεί' παραμετρικά με τη βοήθεια του URI Builder:
+
+```
+                ......
+                // Will contain the raw JSON response as a string.
+                String forecastJsonStr = null;
+                String weatherFormat = "json";
+                String daysForecast = "7";
+                String units = "metric";
+    
+                try {
+                    // Construct the URL for the OpenWeatherMap query
+                    // Possible parameters are avaiable at OWM's forecast API page, at
+                    // http://openweathermap.org/API#forecast
+                    //MODIFIED FOR CITY OF THESSALONIKI, GREECE
+                    final String baseUrl = "http://api.openweathermap.org/data/2.5/forecast/daily?";
+                            //"id=734077&mode=json&units=metric&cnt=7";
+                    final String queryParam = "id";
+                    final String formatParam= "mode";
+                    final String unitsParam= "units";
+                    final String daysParam = "cnt";
+                    final String apiKeyParam = "APPID";
+    
+                    Uri builtUri = Uri.parse(baseUrl).buildUpon()
+                            .appendQueryParameter(queryParam,params[0])
+                            .appendQueryParameter(formatParam,weatherFormat)
+                            .appendQueryParameter(unitsParam, units)
+                            .appendQueryParameter(daysParam, daysForecast)
+                            .appendQueryParameter(apiKeyParam, BuildConfig.OPEN_WEATHER_MAP_API_KEY)
+                            .build();
+    
+                    URL url = new URL(builtUri.toString());
+    
+                    Log.v(LOG_TAG, "Built URI: "+builtUri.toString());
+
+                // Create the request to OpenWeatherMap, and open the connection
+                urlConnection = (HttpURLConnection) url.openConnection();  
+                .......
+```
