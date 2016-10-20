@@ -38,7 +38,8 @@ api.openweathermap.org/data/2.5/forecast/daily?id=734077&units=metric&cnt=7&APPI
                 // Construct the URL for the OpenWeatherMap query
                 // Possible parameters are avaiable at OWM's forecast API page, at
                 // http://openweathermap.org/API#forecast
-                URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?q=94043&mode=json&units=metric&cnt=7");
+                //MODIFED FOR CITY OF THESSALONIKI, GREECE
+                URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?q=734077&mode=json&units=metric&cnt=7");
 
                 // Create the request to OpenWeatherMap, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
