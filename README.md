@@ -202,7 +202,7 @@ listView.setAdapter(...)
  AsyncTask<String, Void, Void> weatherTask = new FetchWeatherTask().execute("734077");
 ```
 
-Δείτε στο αρχείο ```greek-city-codes.csv``` για κωδικούς απο όλες τις ελληνικές πόλεις.
+Δείτε στο αρχείο [greek-city-codes.csv](https://github.com/UomMobileDevelopment/Lesson03-material/blob/master/greek-city-codes.csv) για κωδικούς απο όλες τις ελληνικές πόλεις.
 
 Το URL θα 'χτιστεί' παραμετρικά με τη βοήθεια του URI Builder:
 
@@ -243,3 +243,7 @@ listView.setAdapter(...)
                 urlConnection = (HttpURLConnection) url.openConnection();  
                 .......
 ```
+
+##JSON Decoding##
+
+
