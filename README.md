@@ -93,7 +93,9 @@ api.openweathermap.org/data/2.5/forecast/daily?id=734077&units=metric&cnt=7&APPI
 ```
 
 μεταφέρουμε τον κώδικα μέσα στη μέθοδο ```onCreateView``` της κλάσης ```PlaceholderFragment``` μετά την κλήση:
-```listView.setAdapter(...)```
+```
+listView.setAdapter(...)
+```
 
 Η εκτέλεση της εφαρμογής σε αυτό το σημείο θα βγάλει σφάλμα και θα κρασάρει την εφαρμογή. 
 Το σφάλμα είναι του τύπου ```NetworkOnMainThreadException``` που μας λέει ότι απαγορεύεται να δημιουργούμε συνδέσεις δικτύου στη main και γενικότερα στο MainThread. 
@@ -105,5 +107,14 @@ api.openweathermap.org/data/2.5/forecast/daily?id=734077&units=metric&cnt=7&APPI
 
 Θα χρειαστούμε μια κλάση η οποία απλοποιεί τη διαδικασία δημιουργίας Thread and UI thread synchronization 
 
-###```![AsyncTask](https://developer.android.com/reference/android/os/AsyncTask.html)```####
+##[AsyncTask](https://developer.android.com/reference/android/os/AsyncTask.html)##
+
+Αφού μελετήσουμε την AsyncTask, ήρθε η ώρα να τη χρησιμοποιήσουμε για να μεταφέρουμε εκεί τον ανωτέρω κώδικα που επικολλήσαμε πρόχειρα μέσα στην PlaceholderFragment.
+
+Ξεκινάμε με εργασίες αναδόμησης:
+
+   1. Rename PlaceholderFragment -> ForecastFragment
+   2. Move ForecastFragment to new file
+   3. Create a new AsyncTask child called FetchWeatherTask with the networking code snippet from above
+   
 
