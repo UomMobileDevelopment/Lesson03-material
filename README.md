@@ -127,6 +127,7 @@ listView.setAdapter(...)
 Τώρα η εφαρμογή τρέχει χωρίς κρασάρισμα αλλά τα δεδομένα μας είναι ακόμη dummy.
 
 Θα προσθέσουμε ένα κουμπί στην κεντρική οθόνη ώστε όταν το πατάμε να φορτώνει τα αληθινά δεδομένα απο την υπηρεσία καιρού. Ωστόσο θα πρέπει να γνωρίζουμε πως αυτή η λύση είναι μόνο για debugging και δεν πρέπει να είναι μόνιμη. Είναι ΚΑΚΗ ιδέα να βασιζόμαστε σε κουμπιά για να ανανεώνουμε τα δεδομένα μας. Δείτε εδώ περισσότερα: https://www.youtube.com/watch?v=VFdIy0GjUEs
+
 Επίσης το TASΚ φόρτωσης δεδομένων απο την υπηρεσία καιρού χρειάζεται βελτίωση καθώς είναι αρκετά "δεμένο" με το UI Activity και οποιαδήποτε αλλαγή στο UI (πχ περιστροφή οθόνης) θα διακόψει το TASK και τη μεταφορά δεδομένων. Για την ώρα όμως παραμένουμε έτσι.
 
 Ας προσθέσουμε το κουμπί ανανέωσης. Θα μπει ως επιλογή στο ΜΕΝΟΥ. Δυο λόγια για το μενού:
@@ -134,7 +135,26 @@ listView.setAdapter(...)
 
 ![Δομή ΜΕΝΟΥ](https://github.com/UomMobileDevelopment/Lesson03-material/blob/master/menu.png)
 
-Υλοποιούμε τις παρακάτω μεθόδους στην κλάση ForecastFragment
+Αρχικά θα πρέπει να προσθέσουμε ένα νέο XML αρχείο στον φάκελο res/menu. 
+Δημιουργούμε το menu resource file ```forecastFragment.xml``` με περιεχόμενα:
+
+```
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_refresh"
+        android:title="@string/action_refresh"
+        app:showAsAction="never">
+
+    </item>
+
+</menu>
+```
+
+Στη συνέχεια, υλοποιούμε τις παρακάτω μεθόδους στην κλάση ForecastFragment
 
 ```
 @Override
