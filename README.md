@@ -14,6 +14,8 @@
 api.openweathermap.org/data/2.5/forecast/daily?id=734077&units=metric&cnt=7&APPID=27949ea6b6dffa1dad1deb925c9b024b
 ```
 
+## Top Tip: Για να δοκιμάζετε εύκολα Web Services χρησιμοποιείστε τον ![POSTMAN](https://www.getpostman.com/)
+
 Τι σημαίνει αυτό το μακαρόνι;
 Τι είναι το HTTP Request?    Δες εδώ: http://www.tutorialspoint.com/http/http_requests
 
